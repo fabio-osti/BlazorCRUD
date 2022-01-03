@@ -1,0 +1,8 @@
+﻿@using Microsoft.AspNetCore.Components
+
+<div class="modal-backdrop" @onclick="Close!">
+	<div class="modal-default" @onclick:stopPropagation="true" style="@Style">
+		@ChildContent
+	</div>
+</div>
+

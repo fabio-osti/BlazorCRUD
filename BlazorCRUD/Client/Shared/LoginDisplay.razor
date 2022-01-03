@@ -1,0 +1,26 @@
+﻿@using BlazorCRUD.Client.Pages
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@inject NavigationManager Navigation
+
+<AuthorizeView>
+	<Authorized>
+		<a href="authentication/profile">Hello, @Username</a>
+		<button class="nav-link btn btn-link" @onclick="LogOut">Log out</button>
+	</Authorized>
+	<NotAuthorized>
+		<button class="nav-link btn btn-link" @onclick="ModalActionBuilder(UserFormModal.Signup)">Sign up</button>
+		<button class="nav-link btn btn-link" @onclick="ModalActionBuilder(UserFormModal.Login)">Log in</button>
+	</NotAuthorized>
+</AuthorizeView>
+
+@switch (ModalState) {
+	case UserFormModal.Login:
+		<Modal Close=OnClose><Login OnSuccess=OnClose/></Modal>
+		break;
+	case UserFormModal.Signup:
+		<Modal Close=OnClose><Signup OnSuccess=OnClose/></Modal>
+		break;	
+	default: break;
+}

@@ -1,0 +1,72 @@
+﻿@using BlazorCRUD.Shared
+@using Microsoft.AspNetCore.Components
+
+
+<EditForm class="form-pad" Model=@PersonModel OnSubmit="@OnPersonSubmit">
+	<div class="field">
+		<label>
+			Name:
+			<br />
+			<InputText @bind-Value="PersonModel.Name" class="border form-control" style="width: 100%;" />
+		</label>
+	</div>
+
+	<div class="field" style="display: inline-block;">
+		<div style=" float: left ">
+			<label>
+				Age:
+				<br />
+				<InputNumber @bind-Value="PersonModel.Age" class="border" style="width: 48px;" />
+			</label>
+		</div>
+
+		<div class="field breathing-space-left">
+			<label>
+				Hair Color:
+				<br />
+				<InputSelect @bind-Value="PersonModel.HairColor" class="border" style="height: 30px;">
+					<option value=-1 style="display: none;" />
+					@foreach (var color in UtilitiesAlgorithims.GetValues<HairColor>())
+					{
+						<option value=@color> @color.ToFormatedString() </option>		
+					}
+				</InputSelect>
+			</label>
+		</div>
+
+		<div class="breathing-space-left">
+			<label>
+				Sex:
+				<InputRadioGroup Name="sex" @bind-Value="PersonModel.Sex">
+					<br />
+					<div style="float: left; padding-top: 4px;">
+						<InputRadio Name="sex" Value="false" />
+						<label style="padding-left: 2px;">
+							Female
+						</label>
+					</div>
+
+					<div style="float: left; padding-left: 8px; padding-top: 4px;">
+						<InputRadio Name="sex" Value="true" />
+						<label style="padding-left: 2px;">
+							Male
+						</label>
+					</div>
+				</InputRadioGroup>
+			</label>
+		</div>
+	</div>
+
+	<div>
+		<button class="btn btn-primary" type="submit" style="float: left;">
+			@Label
+		</button>
+		@if (Type == FormType.Read) {
+			<button class="btn btn-primary breathing-space-left"
+				style="float: left;"
+				@onclick="() => PersonModel = new Person()">
+				Clear
+			</button>
+		}
+	</div>
+</EditForm>

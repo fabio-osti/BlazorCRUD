@@ -1,0 +1,13 @@
+﻿.form-control {
+	min-width: 360px;
+
+}
+
+.form-pad {
+	padding: 20px;
+}
+
+.breathing-space-left {
+	margin-left: 8px;
+	float: left;
+}

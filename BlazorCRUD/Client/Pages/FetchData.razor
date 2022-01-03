@@ -1,0 +1,114 @@
+﻿@page "/fetchdata"
+@attribute [Authorize]
+
+@using BlazorCRUD.Client.Shared
+@using BlazorCRUD.Shared
+@using Microsoft.AspNetCore.Authorization
+
+@if (Form != FormType.Closed) {
+
+	<Modal Close="@OnClose">
+		<PersonForm Type="@Form" PreFill="@PersonProp" Success="@OnSuccess" />
+	</Modal>
+
+}
+
+<div style="width: 100% ;">
+	<button class="btn options oi oi-plus"
+			style=" float: left ;"
+			@onclick="OnAddClick" />
+	<button class="btn options oi oi-magnifying-glass"
+			style=" float: left ;"
+			@onclick="OnSearchClick" />
+	<ul class="pagination d-sm-inline-flex flex-grow options"
+		style="margin-right: 0px;">
+		<li class="page-item">
+			<button class="page-link page-navg"
+					disabled="@(PageNum <= 1)"
+					@onclick="OnPageDown">
+				Previous
+			</button>
+		</li>
+		<li class="page-item">
+			<div class="page-link" style=" color: black; background-color: rgb(250, 250, 250) ">
+
+				@PageNum of @TotalPages
+
+			</div>
+		</li>
+		<li class="page-btn page-item ">
+			<button class="page-link page-navg"
+					disabled="@(PageNum >= TotalPages)"
+					@onclick="OnPageUp">
+				Next
+			</button>
+
+		</li>
+
+	</ul>
+
+
+	<select class="btn dropdown-toggle options" @bind="RowsPerPage">
+		<option value=10>10</option>
+		<option value=25>25</option>
+		<option value=50>50</option>
+	</select>
+
+</div>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th class="tbl-head" @onclick="OnNameClick">
+				Name
+				<span class="oi @NameCaret" />
+			</th>
+			<th class="tbl-head" @onclick="OnAgeClick">
+				Age
+				<span class="oi @AgeCaret" />
+			</th>
+			<th class="tbl-head" @onclick="OnSexClick">
+				Sex
+				<span class="oi @SexCaret" />
+			</th>
+			<th class="tbl-head" @onclick="OnHairColorClick">
+				Hair Color
+				<span class="oi @HairColorCaret" />
+			</th>
+
+			<th></th>
+		</tr>
+	</thead>
+	@if (Persons != null) {
+		<tbody>
+			@foreach (var person in Persons!) {
+				<tr>
+		
+					<td>@person.Name</td>
+					<td>@person.Age</td>
+					<td>@(person.Sex ?? false ? "Male" : "Female")</td>
+					<td>@person.HairColor.ToFormatedString()</td>
+					<td>
+						<ul class="list-inline m-0">
+							<li class="list-inline-item">
+								<button class="btn btn-success btn-sm " type="button" @onclick="OnEditClickFactory(person)"
+									title="Edit">
+									<span class="oi oi-pencil" />
+								</button>
+							</li>
+
+							<li class="list-inline-item">
+								<button class="btn btn-danger btn-sm " type="button" @onclick="OnDeleteClickFactory((int)person.Id!)"
+									title="Delete">
+									<span class="oi oi-trash" />
+								</button>
+							</li>
+						</ul>
+					</td>
+				</tr>
+			}
+		</tbody>
+	} else {
+		<tbody>Loading...</tbody>
+	}
+</table>
