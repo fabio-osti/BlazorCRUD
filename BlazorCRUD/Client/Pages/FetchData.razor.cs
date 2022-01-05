@@ -24,14 +24,6 @@ namespace BlazorCRUD.Client.Pages
 
 		async Task Get()
 		{
-			//var filter = Filter == null ?
-			//		"" :
-			//		(Filter.Name == null ? "" : $"&name={Filter.Name}") +
-			//		(Filter.Age == null ? "" : $"&age={Filter.Age}") +
-			//		(Filter.Sex == null ? "" : $"&sex={Filter.Sex}") +
-			//		(Filter.HairColor == null ? "" : $"&hc={Filter.HairColor}");
-			//var resp = await (await HttpBuilder!.Build()).GetFromJsonAsync<ApiResponse<Person>>(
-			//	$"person/read?rows={RowsPerPage}&page={PageNum}&orderby={(byte)OrderingBy}{filter}");
 			var resp = await Store.Read(RowsPerPage, PageNum, OrderingBy, Filter);
 			TotalEntries = resp.Count;
 			Persons = resp.Response;
@@ -152,8 +144,6 @@ namespace BlazorCRUD.Client.Pages
 				,
 				FormType.Create => async (person) =>
 				{
-					//var http = await HttpBuilder!.Build();
-					//await http.PostAsJsonAsync("person/create", person);
 					await Store.Create(person);
 					await Get();
 					Form = FormType.Closed;
@@ -161,8 +151,6 @@ namespace BlazorCRUD.Client.Pages
 				,
 				FormType.Update => async (person) =>
 				{
-					//var http = await HttpBuilder!.Build();
-					//await http.PostAsJsonAsync("person/update", person);
 					await Store.Update(person);
 					await Get();
 					Form = FormType.Closed;
