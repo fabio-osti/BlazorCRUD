@@ -14,24 +14,24 @@ namespace BlazorCRUD.Client.Services
 
 	public class PersonStore : IPersonStore
 	{
-		private IHttpClientBuilder ClientBuilder { get; }
+		private UserAuthenticationService User { get; }
 
-		public PersonStore(IHttpClientBuilder clientBuilder)
+		public PersonStore(UserAuthenticationService user)
 		{
-			ClientBuilder = clientBuilder;
+			User = user;
 		}
 
 		public async Task<bool> Create(Person created)
 		{
 			return
-				(await (await ClientBuilder!.Build()).PostAsJsonAsync("person/create", created))
+				(await (await User!.BuildAuthenticatedHttpClientAsync()).PostAsJsonAsync("person/create", created))
 					.IsSuccessStatusCode;
 
 		}
 
 		public async Task<ApiResponse<Person>> Read(int take, int skip, PersonOrdering orderBy, Person? filter)
 		{
-			return await (await ClientBuilder!.Build()).GetFromJsonAsync<ApiResponse<Person>>(
+			return await (await User!.BuildAuthenticatedHttpClientAsync()).GetFromJsonAsync<ApiResponse<Person>>(
 				$"person/read?rows={take}&page={skip}&orderby={(byte)orderBy}" + (
 					filter == null ?
 						"" : (
@@ -47,14 +47,14 @@ namespace BlazorCRUD.Client.Services
 		public async Task<bool> Update(Person updated)
 		{
 			return
-				(await (await ClientBuilder!.Build()).PostAsJsonAsync("person/update", updated))
+				(await (await User!.BuildAuthenticatedHttpClientAsync()).PostAsJsonAsync("person/update", updated))
 					.IsSuccessStatusCode;
 		}
 
 		public async Task<bool> Delete(int id)
 		{
 			return
-				(await (await ClientBuilder!.Build()).PostAsJsonAsync("person/delete", id))
+				(await (await User!.BuildAuthenticatedHttpClientAsync()).PostAsJsonAsync("person/delete", id))
 					.IsSuccessStatusCode;
 		}
 	}

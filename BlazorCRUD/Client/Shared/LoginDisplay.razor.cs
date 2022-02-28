@@ -12,24 +12,24 @@ namespace BlazorCRUD.Client.Shared
 	{
 		protected override async Task OnInitializedAsync()
 		{
-			Username = await TokenProvider!.GetUser();
+			Username = await User!.GetUsername();
 		}
 
-		[Inject] ITokenProvider? TokenProvider { get; set; }
+		[Inject] UserAuthenticationService? User { get; set; }
 		UserFormModal ModalState { get; set; }
 		string? Username { get; set; }
 
 		Action ModalActionBuilder(UserFormModal modal) => async () =>
 		{
 			ModalState = modal;
-			Username = await TokenProvider!.GetUser();
+			Username = await User!.GetUsername();
 			StateHasChanged();
 		};
 		Action OnClose => ModalActionBuilder(UserFormModal.Closed);
 		
 		private void LogOut(MouseEventArgs args)
 		{
-			TokenProvider!.Set(null);
+			_ = User!.Set(null);
 		}
 	}
 }

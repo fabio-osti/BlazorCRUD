@@ -2,3 +2,12 @@
 
 # IDE0037: Use inferred member name
 dotnet_style_prefer_inferred_anonymous_type_member_names = false
+
+# IDE0047: Remove unnecessary parentheses
+dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity
+
+# IDE0047: Remove unnecessary parentheses
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity
+
+# IDE0047: Remove unnecessary parentheses
+dotnet_style_parentheses_in_other_operators = always_for_clarity

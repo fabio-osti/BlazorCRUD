@@ -14,14 +14,12 @@ namespace BlazorCRUD.Client.Pages
 			//OnSuccess ??= new(() => _ = 0);
 			OnSuccess ??= new(() => Console.WriteLine("OnSuccess not set"));
 
-			if (Provider == null) throw new ArgumentNullException(nameof(Provider));
-			if (HttpBuilder == null) throw new ArgumentNullException(nameof(HttpBuilder));
+			if (User == null) throw new ArgumentNullException(nameof(User));
 		}
 
 		[Parameter] public Action? OnSuccess { private get; set; }
 		[Inject] IJSRuntime? Js { get; set; }
-		[Inject] private ITokenProvider? Provider { get; set; }
-		[Inject] private IHttpClientBuilder? HttpBuilder { get; set; }
+		[Inject] private UserAuthenticationService? User { get; set; }
 
 		private record SignupFormUser
 		{
@@ -43,7 +41,7 @@ namespace BlazorCRUD.Client.Pages
 			try {
 				var salt = PassHelper.GenSalt(24);
 				var hashed = PassHelper.SaltAndHash(UserModel.Password!, salt);
-				var Http = await HttpBuilder!.Build();
+				var Http = await User!.BuildAuthenticatedHttpClientAsync();
 				using var response = await Http.PostAsJsonAsync("User/SignUp", new User
 				{
 					Username = UserModel.Username!,
@@ -51,7 +49,7 @@ namespace BlazorCRUD.Client.Pages
 					Password = hashed,
 					Salt = salt,
 				});
-				await Provider!.Set(await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
+				await User!.Set(await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 				OnSuccess!();
 			} catch (HttpRequestException) {
 				await Js!.InvokeVoidAsync("alert", "Email already registered");

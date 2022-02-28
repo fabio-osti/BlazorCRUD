@@ -15,14 +15,12 @@ namespace BlazorCRUD.Client.Pages
 			//OnSuccess ??= new(() => _ = 0);
 			OnSuccess ??= new(() => Console.WriteLine("OnSuccess not set"));
 
-			if (Provider == null) throw new ArgumentNullException(nameof(Provider));
-			if (HttpBuilder == null) throw new ArgumentNullException(nameof(HttpBuilder));
+			if (User == null) throw new ArgumentNullException(nameof(User));
 		}
 
 		[Parameter] public Action? OnSuccess { private get; set; }
 		[Inject] IJSRuntime? Js { get; set; }
-		[Inject] ITokenProvider? Provider { get; set; }
-		[Inject] IHttpClientBuilder? HttpBuilder { get; set; }
+		[Inject] UserAuthenticationService? User { get; set; }
 
 		private record LoginFormUser
 		{
@@ -39,7 +37,7 @@ namespace BlazorCRUD.Client.Pages
 		{
 			try {
 				// Get user salt
-				var http = await HttpBuilder!.Build();
+				var http = await User!.BuildAuthenticatedHttpClientAsync();
 				var saltResponse = await http.PostAsJsonAsync("User/GetSalt", UserModel.Email);
 				var salt = await saltResponse.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
 				try {
@@ -50,7 +48,7 @@ namespace BlazorCRUD.Client.Pages
 						HashedPassword = hashed
 					});
 					// Set the token
-					await Provider!.Set(await tokenResponse.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
+					await User!.Set(await tokenResponse.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 					OnSuccess!();
 					UserModel = new();
 				} catch (HttpRequestException) {

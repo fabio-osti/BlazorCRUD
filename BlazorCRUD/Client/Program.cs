@@ -10,10 +10,11 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddAuthorizationCore();
 builder.Services.AddSingleton<ILocalStorage, LocalStorage>();
-builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
-builder.Services.AddSingleton<IHttpClientBuilder, HttpClientBuilder>();
+builder.Services.AddSingleton<UserAuthenticationService>();
 builder.Services.AddSingleton<IPersonStore, PersonStore>();
-builder.Services.AddScoped<AuthenticationStateProvider, AppAuthenticationStateProvider>();
+builder.Services.AddSingleton(
+	e => e.GetRequiredService<UserAuthenticationService>().BuildAuthenticationStateProvider()
+);
 
 
 await builder.Build().RunAsync();
