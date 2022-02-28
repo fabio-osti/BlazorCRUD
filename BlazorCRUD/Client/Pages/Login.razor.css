@@ -1,0 +1,14 @@
+﻿.form-control
+{
+	min-width: 360px;
+}
+
+.form-pad
+{
+	padding: 10px;
+}
+
+.breathing-space-bot
+{
+	margin-bottom: 8px;
+}

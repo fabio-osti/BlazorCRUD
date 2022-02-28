@@ -2,27 +2,29 @@
 @using System.ComponentModel.DataAnnotations
 @page "/login"
 
-<EditForm class="form-pad" Model=UserModel OnValidSubmit=OnLogin>
+<EditForm Model=UserModel OnValidSubmit=OnLogin>
 	<DataAnnotationsValidator />
+	<div class="form-pad">
 
-	<div class="form-floating breathing-space-bot">
-		<InputText @bind-Value=UserModel.Email
-				   placeholder="email"
-				   class="form-control" />
-		<label for="email">Email</label>
-		<ValidationMessage For="@(() => UserModel.Email)" />
+		<div class="form-floating breathing-space-bot">
+			<InputText @bind-Value=UserModel.Email
+					   placeholder="email"
+					   class="form-control" />
+			<label for="email">Email</label>
+			<ValidationMessage For="@(() => UserModel.Email)" />
+		</div>
+
+		<div class="form-floating breathing-space-bot">
+			<InputText @bind-Value=UserModel.Password
+					   type="password"
+					   placeholder="Password"
+					   class="form-control" />
+			<label class="form-label" for="email">Password</label>
+			<ValidationMessage For="@(() => UserModel.Password)" />
+
+		</div>
+		<button class="btn btn-primary">Log In</button>
 	</div>
-
-	<div class="form-floating breathing-space-bot">
-		<InputText @bind-Value=UserModel.Password
-				   type="password"
-				   placeholder="Password"
-				   class="form-control" />
-		<label class="form-label" for="email">Password</label>
-		<ValidationMessage For="@(() => UserModel.Password)" />
-
-	</div>
-	<button class="btn btn-primary">Log In</button>
 </EditForm>
 
 

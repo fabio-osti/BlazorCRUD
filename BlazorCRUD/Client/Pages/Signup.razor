@@ -2,36 +2,38 @@
 @using System.ComponentModel.DataAnnotations
 @page "/signup"
 
-<EditForm class="form-pad" Model=UserModel OnValidSubmit=OnSignup>
+<EditForm Model=UserModel OnValidSubmit=OnSignup>
 	<DataAnnotationsValidator />
+	<div class="form-pad">
 
-	<div class="form-floating breathing-space-bot">
-		<InputText @bind-Value=UserModel.Email
-							 placeholder="email"
-							 class="form-control" />
-		<label for="email">Email</label>
-		<ValidationMessage For="@(() => UserModel.Email)" />
+		<div class="form-floating breathing-space-bot">
+			<InputText @bind-Value=UserModel.Email
+					   placeholder="email"
+					   class="form-control" />
+			<label for="email">Email</label>
+			<ValidationMessage For="@(() => UserModel.Email)" />
+		</div>
+
+		<div class="form-floating breathing-space-bot">
+			<InputText @bind-Value=UserModel.Username
+					   placeholder="username"
+					   class="form-control" />
+			<label for="username">Username</label>
+			<ValidationMessage For="@(() => UserModel.Username)" />
+		</div>
+
+
+		<div class="form-floating breathing-space-bot">
+			<InputText @bind-Value=UserModel.Password
+					   type="password"
+					   placeholder="Password"
+					   class="form-control" />
+			<label class="form-label" for="email">Password</label>
+			<ValidationMessage For="@(() => UserModel.Password)" />
+
+		</div>
+		<button class="btn btn-primary">Sign Up</button>
 	</div>
-
-	<div class="form-floating breathing-space-bot">
-		<InputText @bind-Value=UserModel.Username
-							 placeholder="username"
-							 class="form-control" />
-		<label for="username">Username</label>
-		<ValidationMessage For="@(() => UserModel.Username)" />
-	</div>
-
-
-	<div class="form-floating breathing-space-bot">
-		<InputText @bind-Value=UserModel.Password
-							 type="password"
-							 placeholder="Password"
-							 class="form-control" />
-		<label class="form-label" for="email">Password</label>
-		<ValidationMessage For="@(() => UserModel.Password)" />
-
-	</div>
-	<button class="btn btn-primary">Sign Up</button>
 </EditForm>
 
 
