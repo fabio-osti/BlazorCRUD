@@ -1,36 +1,17 @@
 using BlazorCRUD.Server;
-using BlazorCRUD.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TokenAuthenticationHelper;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
-	.AddSingleton<ITokenBuilder, TokenBuilder>()
 	.AddDbContext<PersonContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb")))
-	.AddDbContext<UserContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("UsersDb")))
-	.AddCors();
-builder.Services
-	.AddAuthentication(x =>
-	{
-		x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-		x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-	})
-	.AddJwtBearer(x =>
-	{
-		x.RequireHttpsMetadata = false;
-		x.SaveToken = true;
-		x.TokenValidationParameters = new TokenValidationParameters
-		{
-			ValidateIssuerSigningKey = true,
-			IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["TokenKey"])),
-			ValidateIssuer = false,
-			ValidateAudience = false
-		};
-	});
+	.AddDbContext<UserContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("UsersDb")));
+builder.Services.ConfigureTokenServices(Encoding.ASCII.GetBytes(builder.Configuration["TokenKey"]));
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
